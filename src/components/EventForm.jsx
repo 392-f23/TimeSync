@@ -84,9 +84,10 @@ class EventForm extends Component {
 
       <button onClick={this.handleCreateEvent}>testing purposes only</button>
     
+      <div className='tables'>
         {eventTableData.length > 0 && (
           <div>
-            <h2>Event Time Slots</h2>
+            <h2>Your availability</h2>
             <table>
               <thead>
                 <tr>
@@ -113,6 +114,29 @@ class EventForm extends Component {
             </table>
           </div>
         )}
+
+        <div>
+            <h2>Group's availability</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                {eventTableData.map((slot, index) => (
+                  <tr key={index}>
+                    <td>{slot.date}</td>
+                    <td>{slot.time}</td>
+                    <td></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     );
   }
