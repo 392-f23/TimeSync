@@ -22,15 +22,27 @@ class EventForm extends Component {
 
   handleCreateEvent = (event) => {
     event.preventDefault();
+    
+    // testing purposes only
+    console.log("here")
+    const eventData = {
+      eventName: 'sdfg',
+      startDate: '2023-10-04',
+      endDate: '2023-10-11',
+      startTime: '16:53',
+      endTime: '16:53',
+    };
+    
+    const { eventName, startDate, endDate, startTime, endTime } = eventData;
 
-    const { eventName, startDate, endDate, startTime, endTime } = this.state;
+    // const { eventName, startDate, endDate, startTime, endTime } = this.state;
 
     const eventTableData = [];
     let currentHour = new Date(startDate + ' ' + startTime);
     const endDateTime = new Date(endDate + ' ' + endTime);
 
     while (currentHour <= endDateTime) {
-      eventTableData.push({ time: currentHour.toLocaleTimeString(), selected: false });
+      eventTableData.push({ date: currentHour.toDateString(), time: currentHour.toLocaleTimeString(), selected: false });
       currentHour.setHours(currentHour.getHours() + 1);
     }
 
@@ -69,6 +81,8 @@ class EventForm extends Component {
           <input type="submit" value="Create Event" />
         </form>
       </div>
+
+      <button onClick={this.handleCreateEvent}>testing purposes only</button>
     
         {eventTableData.length > 0 && (
           <div>
@@ -76,6 +90,7 @@ class EventForm extends Component {
             <table>
               <thead>
                 <tr>
+                  <th>Date</th>
                   <th>Time</th>
                   <th>Select</th>
                 </tr>
@@ -83,6 +98,7 @@ class EventForm extends Component {
               <tbody>
                 {eventTableData.map((slot, index) => (
                   <tr key={index}>
+                    <td>{slot.date}</td>
                     <td>{slot.time}</td>
                     <td>
                       <input
