@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import './EventForm.css';
+import '../styles/EventForm.scss';
 
 class EventForm extends Component {
   constructor(props) {

@@ -1,0 +1,138 @@
+// EventForm.scss
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+}
+
+div {
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-top: 0;
+    color: #444;
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+
+    label {
+        flex-basis: 20%;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="time"] {
+        flex-basis: 75%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+        display: block;          // Makes it a block element to be able to center it with margin
+        margin: 20px auto 0;     // Adds margin to the top and auto margin to the sides to center it
+        padding: 15px 30px;      // Increases padding to make the button larger
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #ffffff;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 18px;         // Optional: Increase font size for a larger text
+    
+        &:hover {
+            background-color: #0056b3;
+        }
+    }
+}
+
+button {
+    display: block;          // Makes it a block element to be able to center it with margin
+    margin: 20px auto 0;     // Adds margin to the top and auto margin to the sides to center it
+    padding: 15px 30px;      // Increases padding to make the button larger
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 18px;         // Optional: Increase font size for a larger text
+
+    &:hover {
+        background-color: #0056b3;
+    }
+}
+
+
+.tables {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;  // Reduced gap between the two divs
+    justify-content: space-evenly;
+
+    > div {
+        // Max height and scroll if content overflows
+        max-height: 400px;  // You can adjust this value as needed
+        overflow-y: auto;
+        
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        border-radius: 5px;
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #e0e0e0;
+        }
+
+        th,
+        td {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        td {
+            background-color: #fff;
+
+            input[type="checkbox"] {
+                margin: 0;
+            }
+        }
+
+        tbody tr:hover {
+            background-color: #f5f7fa;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    form {
+        flex-direction: column;
+
+        label, input[type="text"], input[type="date"], input[type="time"] {
+            flex-basis: 100%;
+        }
+    }
+
+    .tables {
+        flex-direction: column;
+    }
+}
