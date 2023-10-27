@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Navigation from "./components/Navigation";
 import EventForm from './components/EventForm';
 
 const App = () => {
@@ -8,6 +9,7 @@ const App = () => {
 
   return (
     <div className="App">
+      <Navigation />
       <EventForm />
       {/* <h2>Create Event</h2>
       <form>
