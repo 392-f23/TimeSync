@@ -22,7 +22,7 @@ class EventForm extends Component {
 
   handleCreateEvent = (event) => {
     event.preventDefault();
-    
+
     // testing purposes only
     console.log("here")
     const eventData = {
@@ -32,7 +32,7 @@ class EventForm extends Component {
       startTime: '16:53',
       endTime: '16:53',
     };
-    
+
     const { eventName, startDate, endDate, startTime, endTime } = eventData;
 
     // const { eventName, startDate, endDate, startTime, endTime } = this.state;
@@ -58,79 +58,89 @@ class EventForm extends Component {
   render() {
     const { eventName, startDate, endDate, startTime, endTime, eventTableData } = this.state;
 
+
+    // TODO: make "daysOfWeek" based on startTime and endTime    
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
     return (
       <div>
         <div>
-        <h2>Create Event</h2>
-        <form onSubmit={this.handleCreateEvent}>
-          <label htmlFor="eventName">Event Name:</label>
-          <input type="text" id="eventName" name="eventName" value={eventName} onChange={this.handleInputChange} required />
+          <h2>Create Event</h2>
+          <form onSubmit={this.handleCreateEvent}>
+            <label htmlFor="eventName">Event Name:</label>
+            <input type="text" id="eventName" name="eventName" value={eventName} onChange={this.handleInputChange} required />
 
-          <label htmlFor="startDate">Start Date:</label>
-          <input type="date" id="startDate" name="startDate" value={startDate} onChange={this.handleInputChange} required />
+            <label htmlFor="startDate">Start Date:</label>
+            <input type="date" id="startDate" name="startDate" value={startDate} onChange={this.handleInputChange} required />
 
-          <label htmlFor="endDate">End Date:</label>
-          <input type="date" id="endDate" name="endDate" value={endDate} onChange={this.handleInputChange} required />
+            <label htmlFor="endDate">End Date:</label>
+            <input type="date" id="endDate" name="endDate" value={endDate} onChange={this.handleInputChange} required />
 
-          <label htmlFor="startTime">Start Time:</label>
-          <input type="time" id="startTime" name="startTime" value={startTime} onChange={this.handleInputChange} step="3600" required />
+            <label htmlFor="startTime">Start Time:</label>
+            <input type="time" id="startTime" name="startTime" value={startTime} onChange={this.handleInputChange} step="3600" required />
 
-          <label htmlFor="endTime">End Time:</label>
-          <input type="time" id="endTime" name="endTime" value={endTime} onChange={this.handleInputChange} step="3600" required />
+            <label htmlFor="endTime">End Time:</label>
+            <input type="time" id="endTime" name="endTime" value={endTime} onChange={this.handleInputChange} step="3600" required />
 
-          <input type="submit" value="Create Event" />
-        </form>
-      </div>
+            <input type="submit" value="Create Event" />
+          </form>
+        </div>
 
-      <button onClick={this.handleCreateEvent}>testing purposes only</button>
-    
-      <div className='tables'>
-        {eventTableData.length > 0 && (
-          <div>
-            <h2>Your availability</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Time</th>
-                  <th>Select</th>
-                </tr>
-              </thead>
-              <tbody>
-                {eventTableData.map((slot, index) => (
-                  <tr key={index}>
-                    <td>{slot.date}</td>
-                    <td>{slot.time}</td>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={slot.selected}
-                        onChange={() => this.handleTimeSlotClick(index)}
-                      />
-                    </td>
+        <button onClick={this.handleCreateEvent}>testing purposes only</button>
+
+        <div className='tables'>
+          {eventTableData.length > 0 && (
+            <div>
+              <h2>Your availability</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    {daysOfWeek.map(day => (
+                      <th key={day}>{day}</th>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                </thead>
+                <tbody>
+                  {eventTableData.map((slot, timeIndex) => (
+                    <tr key={timeIndex}>
+                      <td>{slot.time}</td>
+                      {daysOfWeek.map((day, dayIndex) => (
+                        <td key={dayIndex}>
+                          <input
+                            type="checkbox"
+                            checked={slot.selected}
+                            onChange={() => this.handleTimeSlotClick(timeIndex)}
+                          />
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
 
-        <div>
+          <div>
             <h2>Group's availability</h2>
             <table>
               <thead>
                 <tr>
-                  <th>Date</th>
                   <th>Time</th>
-                  <th>Count</th>
+                  {daysOfWeek.map(day => (
+                    <th key={day}>{day}</th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
-                {eventTableData.map((slot, index) => (
-                  <tr key={index}>
-                    <td>{slot.date}</td>
+                {eventTableData.map((slot, timeIndex) => (
+                  <tr key={timeIndex}>
                     <td>{slot.time}</td>
-                    <td></td>
+                    {daysOfWeek.map((day, dayIndex) => (
+                      <td key={dayIndex}>
+                        {/* You can put the count or any other relevant data here */}
+                      </td>
+                    ))}
                   </tr>
                 ))}
               </tbody>
