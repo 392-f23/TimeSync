@@ -38,19 +38,35 @@ class EventForm extends Component {
     // const { eventName, startDate, endDate, startTime, endTime } = this.state;
 
     const eventTableData = [];
+    let currentDay = new Date(startDate);
     let currentHour = new Date(startDate + ' ' + startTime);
     const endDateTime = new Date(endDate + ' ' + endTime);
+    while (currentDay <= endDate) {
+      // create a day row, and push the day/time cell into it below
+      const dayRow = [];
 
-    while (currentHour <= endDateTime) {
-      eventTableData.push({ date: currentHour.toDateString(), time: currentHour.toLocaleTimeString(), selected: false });
-      currentHour.setHours(currentHour.getHours() + 1);
+      while (currentHour <= endDateTime) {
+        console.log("dayrow", dayRow);
+        dayRow.push({
+          date: currentDay.toDateString(),
+          time: currentTime.toLocaleTimeString(),
+          selected: false,
+        });
+        // eventTableData.push({ date: currentHour.toDateString(), time: currentHour.toLocaleTimeString(), selected: false });
+        currentHour.setHours(currentHour.getHours() + 1);
+      }
+      
+      eventTableData.push(dayRow);
+      currentDay.setDate(currentDay.getDate() + 1);
     }
-
     this.setState({ eventTableData });
   };
 
-  handleTimeSlotClick = ({dayIndex, timeIndex}) => {
+  // handles when a user clicks on a time slot at (dayIndex, timeIndex)
+  // e.g. (0, 0) is the first time slot on Sunday
+  handleTimeSlotClick = (timeIndex) => {
     const updatedEventTableData = [...this.state.eventTableData];
+    console.log(updatedEventTableData)
 
     // TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! HERE
     updatedEventTableData[index].selected = !updatedEventTableData[index].selected;
@@ -67,6 +83,7 @@ class EventForm extends Component {
 
     return (
       <div>
+        {console.log(this.eventTableData)}
         <div>
         <h2>Create Event</h2>
         <form onSubmit={this.handleCreateEvent}>
