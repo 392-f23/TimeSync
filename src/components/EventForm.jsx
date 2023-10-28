@@ -24,7 +24,7 @@ class EventForm extends Component {
     event.preventDefault();
     
     // testing purposes only
-    console.log("here")
+    // console.log("here")
     const eventData = {
       eventName: 'sdfg',
       startDate: '2023-10-04',
@@ -37,11 +37,15 @@ class EventForm extends Component {
 
     // const { eventName, startDate, endDate, startTime, endTime } = this.state;
 
+    // TODO::::!!!!!!
     const eventTableData = [];
     let currentDay = new Date(startDate);
     let currentHour = new Date(startDate + ' ' + startTime);
     const endDateTime = new Date(endDate + ' ' + endTime);
+    console.log(currentDay);
+    console.log(endDate);
     while (currentDay <= endDate) {
+      console.log("ASDASDA")
       // create a day row, and push the day/time cell into it below
       const dayRow = [];
 
@@ -64,12 +68,12 @@ class EventForm extends Component {
 
   // handles when a user clicks on a time slot at (dayIndex, timeIndex)
   // e.g. (0, 0) is the first time slot on Sunday
-  handleTimeSlotClick = (timeIndex) => {
+  handleTimeSlotClick = ({dayIndex, timeIndex}) => {
     const updatedEventTableData = [...this.state.eventTableData];
-    console.log(updatedEventTableData)
+    console.log("hi", updatedEventTableData)
 
     // TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! HERE
-    updatedEventTableData[index].selected = !updatedEventTableData[index].selected;
+    updatedEventTableData[dayIndex][timeIndex].selected = !updatedEventTableData[dayIndex][timeIndex].selected;
     this.setState({ eventTableData: updatedEventTableData });
   };
 
