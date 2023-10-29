@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "firebase": "^10.5.2",
+    "gapi-client": "^0.0.3",
+    "gapi-script": "^1.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

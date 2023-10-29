@@ -1,13 +1,63 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import { getStorage } from 'firebase/storage';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import { getStorage } from "firebase/storage";
 import { initializeApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore';
-import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
-import { useState, useEffect } from 'react';
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import { getFirestore } from "firebase/firestore";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
+import { useState, useEffect } from "react";
+import { gapi } from "gapi-script";
+
+const clientId =
+  "1072499886980-uo8ki98ejurcghbu2qbh2ssi33pbpe21.apps.googleusercontent.com";
+const apiKey = "AIzaSyDqymZUBgjeXJ1tOAan3YK6rI2uKu4Hu2M";
+const discoveryDocs = [
+  "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+];
+const scope = "https://www.googleapis.com/auth/calendar.readonly";
+
+export const initGoogleApi = () => {
+  gapi.load("client:auth2", () => {
+    gapi.client
+      .init({
+        apiKey: apiKey,
+        clientId: clientId,
+        discoveryDocs: discoveryDocs,
+        scope: scope,
+      })
+      .then(() => {
+        console.log("Google API Initialized");
+      });
+  });
+};
+
+export const listUpcomingEvents = async () => {
+  try {
+    const response = await gapi.client.calendar.events.list({
+      calendarId: "primary",
+      timeMin: new Date().toISOString(),
+      showDeleted: false,
+      singleEvents: true,
+      maxResults: 10,
+      orderBy: "startTime",
+    });
+    return response.result.items;
+  } catch (error) {
+    console.error("Error fetching events", error);
+    return [];
+  }
+};
+
+// export const gapi   ?
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
@@ -26,7 +76,7 @@ const firebaseConfig = {
   projectId: "skillswap-5f85d",
   storageBucket: "skillswap-5f85d.appspot.com",
   messagingSenderId: "689531219521",
-  appId: "1:689531219521:web:09d21a680cfc62620860c0"
+  appId: "1:689531219521:web:09d21a680cfc62620860c0",
 };
 
 // Initialize Firebase
@@ -58,10 +108,8 @@ export { firebaseSignOut as signOut };
 
 export const useAuthState = () => {
   const [user, setUser] = useState();
-  
-  useEffect(() => (
-    onAuthStateChanged(getAuth(app), setUser)
-  ), []);
+
+  useEffect(() => onAuthStateChanged(getAuth(app), setUser), []);
 
   return [user];
 };
