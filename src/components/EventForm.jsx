@@ -112,7 +112,6 @@ class EventForm extends Component {
       updatedEventTableData[timeIndex][dayIndex].selected = !updatedEventTableData[timeIndex][dayIndex].selected
     }
     this.setState({ eventTableData: updatedEventTableData });
-    console.log("asdf", timeIndex, dayIndex)
   };
 
   render() {
@@ -128,8 +127,8 @@ class EventForm extends Component {
 
     return (
       <div>
-        
         <div>
+          {/* Enter the event dates and such */}
           <h2>Create Event</h2>
           <form onSubmit={this.handleCreateEvent}>
             <label htmlFor="eventName">Event Name:</label>
@@ -188,63 +187,77 @@ class EventForm extends Component {
           </form>
         </div>
         <button onClick={this.handleCreateEvent}>testing purposes only</button>
+
+        {/* result... */}
         <div className='tables'>
-          {eventTableData.length > 0 && (
-            <div>
-              <h2>Your availability</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Time</th>
-                    {/* render headings*/}
-                    {eventTableData[0].map((array, index) => (
-                      array.date !== undefined ? 
-                        <th key={index}>{array.date}</th>
-                      : null
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {eventTableData.map((slot, timeIndex) => (
-                    <tr key={timeIndex}>
-
-                      {slot.map((day, dayIndex) => (
-
-                        day.date !== undefined ? 
-                          <td key={`${dayIndex}, ${timeIndex}`}>
-                            <input
-                              type="checkbox"
-                              checked={slot.selected}
-                              onChange={() => this.handleTimeSlotClick({timeIndex, dayIndex})}
-                            /></td>
-                            : <td>{day}</td>
+          <div className="input-table">
+            {eventTableData.length > 0 && (
+              <div>
+                <h2>Your availability</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      {/* render heading*/}
+                      {/* eventTableData is an array of hourRows */}
+                      {/* hourRow = ["4:00 PM", "Oct 4", "Oct 5", ...] */}
+                      {/* so array[0] is the hourRow time (e.g.) */}
+                      {eventTableData[0].map((array, index) => (
+                        array.date !== undefined ? 
+                          <th key={index}>{array.date}</th>
+                        : null
                       ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-          <div>
-            <h2>Group's availability</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Time</th>
-                  <th>Count</th>
-                </tr>
-              </thead>
-              <tbody>
-                {eventTableData.map((slot, index) => (
-                  <tr key={index}>
-                    <td>{slot.date}</td>
-                    <td>{slot.time}</td>
-                    <td></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                  </thead>
+                  <tbody>
+                    {eventTableData.map((slot, timeIndex) => (
+                      <tr key={timeIndex}>
+                        {slot.map((day, dayIndex) => (
+                          day.date !== undefined ? 
+                            <td key={`${dayIndex}, ${timeIndex}`}>
+                              <input
+                                type="checkbox"
+                                checked={slot.selected}
+                                onChange={() => this.handleTimeSlotClick({timeIndex, dayIndex})}
+                              /></td>
+                              : <td>{day}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+          <div className="group-table">
+            {eventTableData.length > 0 && (
+              <div>
+                <h2>Group's availability</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      {eventTableData[0].map((array, index) => (
+                        array.date !== undefined ? 
+                          <th key={index}>{array.date}</th>
+                        : null
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {eventTableData.map((slot, timeIndex) => (
+                      <tr key={timeIndex}>
+                        {slot.map((day, dayIndex) => (
+                          day.date !== undefined ? 
+                            <td key={`${dayIndex}, ${timeIndex}`}>0</td> // count of availability
+                              : <td>{day}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
       </div>
