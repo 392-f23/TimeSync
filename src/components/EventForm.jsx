@@ -102,8 +102,14 @@ class EventForm extends Component {
     this.setState({ eventTableData });
   };
 
-  // handles when a user clicks on a time slot at (dayIndex, timeIndex)
-  // e.g. (0, 0) is the first time slot on Sunday
+  // handles when a user clicks on a time slot at (dayIndex, timeIndex) in the eventTable.
+  // IMPORTANT!!!! so like
+  
+  // it's currently set up that (0, 0) = 4:00 PM 
+  // (0, 1) = the first day at 4:00 PM
+  // (0, 2) = the second day at 4:00 PM
+  // (1, 0) = 5:00 PM
+  // Sorry I don't want to fix this but a fix should happen in the table rendering logic later.
   handleTimeSlotClick = ({ timeIndex, dayIndex }) => {
     const updatedEventTableData = [...this.state.eventTableData];
     
