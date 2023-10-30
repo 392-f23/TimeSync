@@ -223,7 +223,7 @@ class EventForm extends Component {
           <div className="input-table">
             {eventTableData.length > 0 && (
               <div>
-                <h2>Your availability</h2>
+                <h2>Your "Can Meet" availability</h2>
                 <table>
                   <thead>
                     <tr>
@@ -258,6 +258,44 @@ class EventForm extends Component {
                 </table>
               </div>
             )}
+
+            {eventTableData.length > 0 && (
+                <div>
+                  <h2>Your "Would Rather Not Meet" availability</h2>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Time</th>
+                        {/* render heading*/}
+                        {/* eventTableData is an array of hourRows */}
+                        {/* hourRow = ["4:00 PM", "Oct 4", "Oct 5", ...] */}
+                        {/* so array[0] is the hourRow time (e.g.) */}
+                        {eventTableData[0].map((array, index) => (
+                          array.date !== undefined ? 
+                            <th key={index}>{array.date}</th>
+                          : null
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {eventTableData.map((slot, timeIndex) => (
+                        <tr key={timeIndex}>
+                          {slot.map((day, dayIndex) => (
+                            day.date !== undefined ? 
+                              <td key={`${dayIndex}, ${timeIndex}`}>
+                                <input
+                                  type="checkbox"
+                                  checked={slot.selected}
+                                  onChange={() => this.handleTimeSlotClick({timeIndex, dayIndex})}
+                                /></td>
+                                : <td>{day}</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
           </div>
           
           {/* <div className="submit-availability-button"> */}
