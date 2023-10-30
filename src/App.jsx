@@ -1,36 +1,56 @@
-import { useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
 import Navigation from "./components/Navigation";
-import EventForm from './components/EventForm';
+import EventForm from "./components/EventForm";
+import { listUpcomingEvents, initGoogleApi, useAuthState } from ".";
 
 const App = () => {
-  const [count, setCount] = useState(0);
+  const [user] = useAuthState(); // Get the current user's authentication state
+  const [events, setEvents] = useState([]);
+  const [isGoogleApiInitialized, setIsGoogleApiInitialized] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    initGoogleApi()
+      .then(() => setIsGoogleApiInitialized(true))
+      .catch((error) => setError(error))
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  useEffect(() => {
+    if (isGoogleApiInitialized && user) { // Check if the Google API is initialized and the user is signed in
+      const fetchEvents = async () => {
+        try {
+          setIsLoading(true);
+          const events = await listUpcomingEvents();
+          setEvents(events);
+        } catch (error) {
+          setError(error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchEvents();
+    }
+  }, [isGoogleApiInitialized, user]); // Run this effect when the Google API initialization status or user's sign-in status changes
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div className="App">
+      <ul>
+        {events.map((event) => (
+          <li key={event.id}>{event.summary}</li>
+        ))}
+      </ul>
       <Navigation />
       <EventForm />
-      {/* <h2>Create Event</h2>
-      <form>
-          <label for="eventName">Event Name:</label>
-          <input type="text" id="eventName" name="eventName" required></input>
-
-          <label for="eventDate">Start Date:</label>
-          <input type="date" id="eventDate" name="eventDate" required></input>
-
-          <label for="eventDate">End Date:</label>
-          <input type="date" id="eventDate" name="eventDate" required></input>
-
-          <label for="eventTime">Start Time:</label>
-          <input type="time" id="eventTime" name="eventTime" required></input>
-
-          <label for="eventTime">End Time:</label>
-          <input type="time" id="eventTime" name="eventTime" required></input>
-
-          <input type="submit" value="Create Event"></input>
-      </form> */}
-    
     </div>
   );
 };
