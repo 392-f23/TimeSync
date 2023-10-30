@@ -26,6 +26,23 @@ class EventForm extends Component {
     };
   }
 
+  handleSubmitAvailability = () => {
+    const { eventTableData } = this.state;
+
+    // Loop through the eventTableData to count selected timeslots and update the count
+    const updatedEventTableData = eventTableData.map((slot) =>
+      slot.map((day) => {
+        if (day.selected) {
+          // Increment the count if the checkbox is selected, and if the count is undefined, set it to 0 then add 1
+          return { ...day, count: (day.count || 0) + 1 };
+        } else {
+          return day;
+        }
+      })
+    );
+    this.setState({ eventTableData: updatedEventTableData });
+  };
+
   handleInputChange = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
@@ -44,10 +61,10 @@ class EventForm extends Component {
       endTime: "20:53",
     };
 
-    const { eventName, startDate, endDate, startTime, endTime } = eventData;
+    // const { eventName, startDate, endDate, startTime, endTime } = eventData;
 
     // comment ^^^ and uncomment vvv to test out input form
-    // const { eventName, startDate, endDate, startTime, endTime } = this.state;
+    const { eventName, startDate, endDate, startTime, endTime } = this.state;
 
     // each row should be an hour
     // each col should be a day
@@ -84,7 +101,8 @@ class EventForm extends Component {
         hourRow.push({
           date: currentDateTime.toDateString(),
           time: convertTo12HourFormat(currentHour),
-          selected: false, // for checkbox
+          selected: false, // checkbox for user availibilty table
+          count: 0 // count for group availability table
         })
 
         currentDateTime.setDate(currentDateTime.getDate() + 1);
@@ -192,7 +210,7 @@ class EventForm extends Component {
             <input type="submit" value="Create Event" />
           </form>
         </div>
-        <button onClick={this.handleCreateEvent}>testing purposes only</button>
+        {/* <button onClick={this.handleCreateEvent}>testing purposes only</button> */}
 
         {/* result... */}
         <div className='tables'>
@@ -235,6 +253,15 @@ class EventForm extends Component {
               </div>
             )}
           </div>
+          
+          {/* <div className="submit-availability-button"> */}
+          {eventTableData.length > 0 && (
+            <button onClick={this.handleSubmitAvailability} className="submit-availability-button">
+              Submit Availability
+            </button>)}
+          {/* </div> */}
+
+                         
           <div className="group-table">
             {eventTableData.length > 0 && (
               <div>
@@ -255,7 +282,7 @@ class EventForm extends Component {
                       <tr key={timeIndex}>
                         {slot.map((day, dayIndex) => (
                           day.date !== undefined ? 
-                            <td key={`${dayIndex}, ${timeIndex}`}>0</td> // count of availability
+                            <td key={`${dayIndex}, ${timeIndex}`}>{day.count}</td> // count of availability
                               : <td>{day}</td>
                         ))}
                       </tr>
