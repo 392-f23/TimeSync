@@ -55,10 +55,10 @@ class EventForm extends Component {
     // console.log("here")
     const eventData = {
       eventName: "sdfg",
-      startDate: "2023-10-04",
-      endDate: "2023-10-11",
-      startTime: "16:53",
-      endTime: "20:53",
+      startDate: "2023-10-29",
+      endDate: "2023-11-03",
+      startTime: "08:53",
+      endTime: "18:53",
     };
 
     // const { eventName, startDate, endDate, startTime, endTime } = eventData;
@@ -92,11 +92,14 @@ class EventForm extends Component {
     // eventTableData = [hourRow4PM, hourRow5PM, ...]
 
     while (currentHour <= endHour) {
+      console.log("startdate:", startDateTime)
+      console.log(currentHour, endHour)
+      
       const hourRow = [convertTo12HourFormat(currentHour)];
 
       // iterate over the week, incrementing day with each lop
       while (currentDateTime <= endDateTime) {
-
+        console.log(currentHour)
         // push date/hour cell 
         hourRow.push({
           date: currentDateTime.toDateString(),
@@ -104,7 +107,7 @@ class EventForm extends Component {
           selected: false, // checkbox for user availibilty table
           count: 0 // count for group availability table
         })
-
+        
         currentDateTime.setDate(currentDateTime.getDate() + 1);
       }
       
@@ -114,7 +117,10 @@ class EventForm extends Component {
       startDateTime.setHours(startDateTime.getHours() + 1);
       // reset the date to the start date
       // e.g., 5:00 PM Wed Oct 11 2023 -> 5:00 PM Wed Oct 04 2023
+
+      currentDateTime.setMonth(startDateTime.getMonth());
       currentDateTime.setDate(startDateTime.getDate());
+
       currentHour += 1;
     }
     this.setState({ eventTableData });
