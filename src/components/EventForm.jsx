@@ -1,56 +1,67 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import "../styles/EventForm.scss";
 
-// helper function to convert 0-23 int to 12-hour format
 function convertTo12HourFormat(hour) {
   if (hour < 0 || hour > 23) {
     return "Invalid hour";
   }
 
   const suffix = hour >= 12 ? "PM" : "AM";
-  const convertedHour = hour % 12 || 12; // Handle 0 as 12 in 12-hour format
+  const convertedHour = hour % 12 || 12;
 
   return `${convertedHour}:00 ${suffix}`;
 }
 
-class EventForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      eventName: "",
-      startDate: "",
-      endDate: "",
-      startTime: "",
-      endTime: "",
-      eventTableData: [],
-    };
-  }
+const EventForm = () => {
+  const [state, setState] = useState({
+    eventName: "",
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+    eventTableData: [],
+  });
 
-  handleSubmitAvailability = () => {
-    const { eventTableData } = this.state;
-
-    // Loop through the eventTableData to count selected timeslots and update the count
+  const handleSubmitCanMeetAvailability = () => {
+    const { eventTableData } = state;
     const updatedEventTableData = eventTableData.map((slot) =>
       slot.map((day) => {
         if (day.selected) {
-          // Increment the count if the checkbox is selected, and if the count is undefined, set it to 0 then add 1
           return { ...day, count: (day.count || 0) + 1 };
         } else {
           return day;
         }
       })
     );
-    this.setState({ eventTableData: updatedEventTableData });
+    setState({ ...state, eventTableData: updatedEventTableData });
   };
 
-  handleInputChange = (event) => {
+  const handleSubmitWouldRatherNotAvailability = () => {
+    const { eventTableData } = state;
+    const updatedEventTableData = eventTableData.map((slot) =>
+      slot.map((day) => {
+        if (day.selected) {
+          return { ...day, count: (day.count || 0) + 0.5 };
+        } else {
+          return day;
+        }
+      })
+    );
+    setState({ ...state, eventTableData: updatedEventTableData });
+  };
+
+  const handleSubmitAvailability = () => {
+    handleSubmitCanMeetAvailability();
+    handleSubmitWouldRatherNotAvailability();
+  };
+
+  const handleInputChange = (event) => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
+    setState({ ...state, [name]: value });
   };
 
-  handleCreateEvent = (event) => {
+  const handleCreateEvent = (event) => {
     event.preventDefault();
-
     // testing purposes only
     // console.log("here")
     const eventData = {
@@ -64,16 +75,15 @@ class EventForm extends Component {
     // const { eventName, startDate, endDate, startTime, endTime } = eventData;
 
     // comment ^^^ and uncomment vvv to test out input form
-    const { eventName, startDate, endDate, startTime, endTime } = this.state;
+    const { eventName, startDate, endDate, startTime, endTime } = state;
 
     // each row should be an hour
     // each col should be a day
 
-    const eventTableData = [];
+    const eventTable = [];
     let startDateTime = new Date(startDate + " " + startTime);
     let currentDateTime = new Date(startDate + " " + startTime);
     const endDateTime = new Date(endDate + " " + endTime);
-
 
     // these are represented as integers (i.e., 0-23)
     let currentHour = currentDateTime.getHours();
@@ -111,7 +121,7 @@ class EventForm extends Component {
         currentDateTime.setDate(currentDateTime.getDate() + 1);
       }
       
-      eventTableData.push(hourRow);
+      eventTable.push(hourRow);
       // update the start time to the next hour
       // e.g., 4:00 PM -> 5:00 PM
       startDateTime.setHours(startDateTime.getHours() + 1);
@@ -123,51 +133,41 @@ class EventForm extends Component {
 
       currentHour += 1;
     }
-    this.setState({ eventTableData });
+    setState({ ...state, eventTableData: eventTable });
   };
 
-  // handles when a user clicks on a time slot at (dayIndex, timeIndex) in the eventTable.
-  // IMPORTANT!!!! so like
-  
-  // it's currently set up that (0, 0) = 4:00 PM 
-  // (0, 1) = the first day at 4:00 PM
-  // (0, 2) = the second day at 4:00 PM
-  // (1, 0) = 5:00 PM
-  // Sorry I don't want to fix this but a fix should happen in the table rendering logic later.
-  handleTimeSlotClick = ({ timeIndex, dayIndex }) => {
-    const updatedEventTableData = [...this.state.eventTableData];
-    
-    // prevents "undfined.selected" warning/error
-    if (typeof this.state.eventTableData[timeIndex][dayIndex] !== 'string') {
-      updatedEventTableData[timeIndex][dayIndex].selected = !updatedEventTableData[timeIndex][dayIndex].selected
+  const handleTimeSlotClick = ({ timeIndex, dayIndex }) => {
+    const updatedEventTableData = [...state.eventTableData];
+    if (typeof state.eventTableData[timeIndex][dayIndex] !== "string") {
+      updatedEventTableData[timeIndex][dayIndex].selected = !updatedEventTableData[timeIndex][dayIndex].selected;
     }
-    this.setState({ eventTableData: updatedEventTableData });
+    setState({ ...state, eventTableData: updatedEventTableData });
   };
 
-  render() {
-    const {
-      eventName,
-      startDate,
-      endDate,
-      startTime,
-      endTime,
-      eventTableData,
-    } = this.state;
+  const {
+    eventName,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    eventTableData,
+  } = state;
 
+ 
 
-    return (
-      <div>
+  return (
+    <div>
         <div>
           {/* Enter the event dates and such */}
           <h2>Create Event</h2>
-          <form onSubmit={this.handleCreateEvent}>
+          <form onSubmit={handleCreateEvent}>
             <label htmlFor="eventName">Event Name:</label>
             <input
               type="text"
               id="eventName"
               name="eventName"
               value={eventName}
-              onChange={this.handleInputChange}
+              onChange={handleInputChange}
               required
             />
 
@@ -177,7 +177,7 @@ class EventForm extends Component {
               id="startDate"
               name="startDate"
               value={startDate}
-              onChange={this.handleInputChange}
+              onChange={handleInputChange}
               required
             />
 
@@ -187,7 +187,7 @@ class EventForm extends Component {
               id="endDate"
               name="endDate"
               value={endDate}
-              onChange={this.handleInputChange}
+              onChange={handleInputChange}
               required
             />
 
@@ -197,7 +197,7 @@ class EventForm extends Component {
               id="startTime"
               name="startTime"
               value={startTime}
-              onChange={this.handleInputChange}
+              onChange={handleInputChange}
               step="3600"
               required
             />
@@ -208,7 +208,7 @@ class EventForm extends Component {
               id="endTime"
               name="endTime"
               value={endTime}
-              onChange={this.handleInputChange}
+              onChange={handleInputChange}
               step="3600"
               required
             />
@@ -248,7 +248,7 @@ class EventForm extends Component {
                               <input
                                 type="checkbox"
                                 checked={slot.selected}
-                                onChange={() => this.handleTimeSlotClick({timeIndex, dayIndex})}
+                                onChange={() => handleTimeSlotClick({timeIndex, dayIndex})}
                               /></td>
                               : <td>{day}</td>
                         ))}
@@ -286,7 +286,7 @@ class EventForm extends Component {
                                 <input
                                   type="checkbox"
                                   checked={slot.selected}
-                                  onChange={() => this.handleTimeSlotClick({timeIndex, dayIndex})}
+                                  onChange={() => handleTimeSlotClick({timeIndex, dayIndex})}
                                 /></td>
                                 : <td>{day}</td>
                           ))}
@@ -300,7 +300,7 @@ class EventForm extends Component {
           
           {/* <div className="submit-availability-button"> */}
           {eventTableData.length > 0 && (
-            <button onClick={this.handleSubmitAvailability} className="submit-availability-button">
+            <button onClick={handleSubmitAvailability} className="submit-availability-button">
               Submit Availability
             </button>)}
           {/* </div> */}
@@ -339,7 +339,8 @@ class EventForm extends Component {
         </div>
       </div>
     );
-  }
-}
+                        };
+  
+
 
 export default EventForm;
