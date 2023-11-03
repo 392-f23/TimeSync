@@ -1,0 +1,6 @@
+.tables {
+    display: flex;
+    columns: 2;
+    gap: 50px;
+    padding: 50px;
+}
