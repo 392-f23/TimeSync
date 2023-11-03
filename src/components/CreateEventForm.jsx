@@ -1,3 +1,4 @@
+import './CreateEventForm.css'
 const CreateEventForm = ({
     eventName,
     startDate,
