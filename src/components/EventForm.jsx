@@ -26,7 +26,7 @@ const EventForm = () => {
   const { eventName, startDate, endDate, startTime, endTime, eventTableData } =
     state;
 
-    const handleSubmitCanMeetAvailability = () => {
+    const handleSubmitAvailability = () => {
       const { eventTableData } = state;
       const updatedEventTableData = eventTableData.map((slot) =>
         slot.map((day) => {
@@ -43,35 +43,12 @@ const EventForm = () => {
       setState({ ...state, eventTableData: updatedEventTableData });
     };
     
-    // const handleSubmitWouldRatherNotAvailability = () => {
-    //   const { eventTableData } = state;
-    //   const updatedEventTableData = eventTableData.map((slot) =>
-    //     slot.map((day) => {
-    //       if (day.selected == "wouldRatherNotMeet") {
-    //         return { ...day, count: (day.count || 0) + 0.5 };
-    //       } else {
-    //         return day;
-    //       }
-    //     })
-    //   );
-    //   setState({ ...state, eventTableData: updatedEventTableData });
-    // };
-    
-    const handleSubmitAvailability = () => {
-      handleSubmitCanMeetAvailability();
-    };
-    
-    const handleInputChange = (event) => {
-      const { name, value } = event.target;
-      setState({ ...state, [name]: value });
-    };
-    
     const handleCreateEvent = (event) => {
       event.preventDefault();
       // testing purposes only
       // console.log("here")
       const eventData = {
-        eventName: "sdfg",
+        eventName: "CS392",
         startDate: "2023-10-29",
         endDate: "2023-11-03",
         startTime: "08:53",
@@ -175,7 +152,12 @@ const EventForm = () => {
         endTime={endTime}
         eventTableData={eventTableData}
       />
-      <button onClick={handleCreateEvent}>testing purposes only</button>
+      <h2>Join Event</h2>
+      <form id="myForm">
+        <label for="name">Enter unique event code:</label>
+        <input type="text" id="name" name="name" />
+    </form>
+      <button onClick={handleCreateEvent}>Join Event</button>
 
       {/* result... */}
       <div className="tables">
