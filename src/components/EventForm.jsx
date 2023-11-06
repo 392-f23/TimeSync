@@ -28,12 +28,13 @@ const EventForm = () => {
 
     const handleSubmitCanMeetAvailability = () => {
       const { eventTableData } = state;
-      console.log("HI!");
-      console.log(eventTableData);
       const updatedEventTableData = eventTableData.map((slot) =>
         slot.map((day) => {
-          if (day.selected) {
+          if (day.selected == "canMeet") {
             return { ...day, count: (day.count || 0) + 1 };
+          }
+          else if (day.selected == "wouldRatherNotMeet") {
+              return { ...day, count: (day.count || 0) + 0.5 };
           } else {
             return day;
           }
@@ -42,23 +43,22 @@ const EventForm = () => {
       setState({ ...state, eventTableData: updatedEventTableData });
     };
     
-    const handleSubmitWouldRatherNotAvailability = () => {
-      const { eventTableData } = state;
-      const updatedEventTableData = eventTableData.map((slot) =>
-        slot.map((day) => {
-          if (day.selected) {
-            return { ...day, count: (day.count || 0) + 0.5 };
-          } else {
-            return day;
-          }
-        })
-      );
-      setState({ ...state, eventTableData: updatedEventTableData });
-    };
+    // const handleSubmitWouldRatherNotAvailability = () => {
+    //   const { eventTableData } = state;
+    //   const updatedEventTableData = eventTableData.map((slot) =>
+    //     slot.map((day) => {
+    //       if (day.selected == "wouldRatherNotMeet") {
+    //         return { ...day, count: (day.count || 0) + 0.5 };
+    //       } else {
+    //         return day;
+    //       }
+    //     })
+    //   );
+    //   setState({ ...state, eventTableData: updatedEventTableData });
+    // };
     
     const handleSubmitAvailability = () => {
       handleSubmitCanMeetAvailability();
-      handleSubmitWouldRatherNotAvailability();
     };
     
     const handleInputChange = (event) => {
@@ -109,19 +109,19 @@ const EventForm = () => {
       // eventTableData = [hourRow4PM, hourRow5PM, ...]
     
       while (currentHour <= endHour) {
-        console.log("startdate:", startDateTime);
-        console.log(currentHour, endHour);
+        // console.log("startdate:", startDateTime);
+        // console.log(currentHour, endHour);
     
         const hourRow = [convertTo12HourFormat(currentHour)];
     
         // iterate over the week, incrementing day with each lop
         while (currentDateTime <= endDateTime) {
-          console.log(currentHour);
+          // console.log(currentHour);
           // push date/hour cell
           hourRow.push({
             date: currentDateTime.toDateString(),
             time: convertTo12HourFormat(currentHour),
-            selected: false, // checkbox for user availibilty table
+            selected: "none", // checkbox for user availibilty table
             count: 0, // count for group availability table
           });
     
@@ -145,10 +145,23 @@ const EventForm = () => {
     
     const handleTimeSlotClick = ({ timeIndex, dayIndex }) => {
       const updatedEventTableData = [...state.eventTableData];
-      if (typeof state.eventTableData[timeIndex][dayIndex] !== "string") {
-        updatedEventTableData[timeIndex][dayIndex].selected =
-          !updatedEventTableData[timeIndex][dayIndex].selected;
-      }
+      if (updatedEventTableData[timeIndex][dayIndex].selected == "canMeet") {
+        updatedEventTableData[timeIndex][dayIndex].selected = "none";
+      } else {
+        updatedEventTableData[timeIndex][dayIndex].selected = "canMeet";
+      } 
+        console.log("canMeet", updatedEventTableData[timeIndex][dayIndex].selected)
+      setState({ ...state, eventTableData: updatedEventTableData });
+    };
+
+    const handleTimeSlotClickWouldRatherNotMeet = ({ timeIndex, dayIndex }) => {
+      const updatedEventTableData = [...state.eventTableData];
+      if (updatedEventTableData[timeIndex][dayIndex].selected == "wouldRatherNotMeet") {
+        updatedEventTableData[timeIndex][dayIndex].selected = "none";
+      } else {
+        updatedEventTableData[timeIndex][dayIndex].selected = "wouldRatherNotMeet";
+      } 
+      console.log("wouldRatherNotMeet", updatedEventTableData[timeIndex][dayIndex].selected)
       setState({ ...state, eventTableData: updatedEventTableData });
     };
 
@@ -193,7 +206,7 @@ const EventForm = () => {
                           <td key={`${dayIndex}, ${timeIndex}`}>
                             <input
                               type="checkbox"
-                              checked={slot.selected}
+                              // checked={slot.selected == "canMeet"}
                               onChange={() =>
                                 handleTimeSlotClick({ timeIndex, dayIndex })
                               }
@@ -236,9 +249,10 @@ const EventForm = () => {
                           <td key={`${dayIndex}, ${timeIndex}`}>
                             <input
                               type="checkbox"
-                              checked={slot.selected}
+                              // checked={slot.selected == "wouldRatherNotMeet"}
+                              // checked={console.log(slot.selected)}
                               onChange={() =>
-                                handleTimeSlotClick({ timeIndex, dayIndex })
+                                handleTimeSlotClickWouldRatherNotMeet({ timeIndex, dayIndex })
                               }
                             />
                           </td>
