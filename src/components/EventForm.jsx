@@ -142,6 +142,20 @@ const EventForm = () => {
       setState({ ...state, eventTableData: updatedEventTableData });
     };
 
+    // Testing function to export the table to JSON to console
+    // note: find the button with id="exportJSON" 
+    const exportToJSON = () => {
+      const jsonData = JSON.stringify(state.eventTableData);
+      console.log(jsonData); 
+    };
+
+    const importJSON = (jsonData) => {
+      const importedData = JSON.parse(jsonData);
+      console.log(importedData);
+      setState({ ...state, eventTableData: importedData });
+    };
+    
+
   return (
     <div>
       <CreateEventForm
@@ -290,8 +304,14 @@ const EventForm = () => {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </div>            
           )}
+          <div className="dummyDataButtons">
+            <button id="exportJSON" onClick={exportToJSON}>Export to JSON</button>
+
+
+          </div>
+          
         </div>
       </div>
     </div>
