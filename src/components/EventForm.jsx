@@ -26,44 +26,21 @@ const EventForm = () => {
   const { eventName, startDate, endDate, startTime, endTime, eventTableData } =
     state;
 
-    const handleSubmitCanMeetAvailability = () => {
-      const { eventTableData } = state;
-      console.log("HI!");
-      console.log(eventTableData);
-      const updatedEventTableData = eventTableData.map((slot) =>
-        slot.map((day) => {
-          if (day.selected) {
-            return { ...day, count: (day.count || 0) + 1 };
-          } else {
-            return day;
-          }
-        })
-      );
-      setState({ ...state, eventTableData: updatedEventTableData });
-    };
-    
-    const handleSubmitWouldRatherNotAvailability = () => {
-      const { eventTableData } = state;
-      const updatedEventTableData = eventTableData.map((slot) =>
-        slot.map((day) => {
-          if (day.selected) {
-            return { ...day, count: (day.count || 0) + 0.5 };
-          } else {
-            return day;
-          }
-        })
-      );
-      setState({ ...state, eventTableData: updatedEventTableData });
-    };
-    
     const handleSubmitAvailability = () => {
-      handleSubmitCanMeetAvailability();
-      handleSubmitWouldRatherNotAvailability();
-    };
-    
-    const handleInputChange = (event) => {
-      const { name, value } = event.target;
-      setState({ ...state, [name]: value });
+      const { eventTableData } = state;
+      const updatedEventTableData = eventTableData.map((slot) =>
+        slot.map((day) => {
+          if (day.selected == "canMeet") {
+            return { ...day, count: (day.count || 0) + 1 };
+          }
+          else if (day.selected == "wouldRatherNotMeet") {
+              return { ...day, count: (day.count || 0) + 0.5 };
+          } else {
+            return day;
+          }
+        })
+      );
+      setState({ ...state, eventTableData: updatedEventTableData });
     };
     
     const handleCreateEvent = (event) => {
@@ -71,7 +48,7 @@ const EventForm = () => {
       // testing purposes only
       // console.log("here")
       const eventData = {
-        eventName: "sdfg",
+        eventName: "CS392",
         startDate: "2023-10-29",
         endDate: "2023-11-03",
         startTime: "08:53",
@@ -109,19 +86,19 @@ const EventForm = () => {
       // eventTableData = [hourRow4PM, hourRow5PM, ...]
     
       while (currentHour <= endHour) {
-        console.log("startdate:", startDateTime);
-        console.log(currentHour, endHour);
+        // console.log("startdate:", startDateTime);
+        // console.log(currentHour, endHour);
     
         const hourRow = [convertTo12HourFormat(currentHour)];
     
         // iterate over the week, incrementing day with each lop
         while (currentDateTime <= endDateTime) {
-          console.log(currentHour);
+          // console.log(currentHour);
           // push date/hour cell
           hourRow.push({
             date: currentDateTime.toDateString(),
             time: convertTo12HourFormat(currentHour),
-            selected: false, // checkbox for user availibilty table
+            selected: "none", // checkbox for user availibilty table
             count: 0, // count for group availability table
           });
     
@@ -145,12 +122,54 @@ const EventForm = () => {
     
     const handleTimeSlotClick = ({ timeIndex, dayIndex }) => {
       const updatedEventTableData = [...state.eventTableData];
-      if (typeof state.eventTableData[timeIndex][dayIndex] !== "string") {
-        updatedEventTableData[timeIndex][dayIndex].selected =
-          !updatedEventTableData[timeIndex][dayIndex].selected;
-      }
+      if (updatedEventTableData[timeIndex][dayIndex].selected == "canMeet") {
+        updatedEventTableData[timeIndex][dayIndex].selected = "none";
+      } else {
+        updatedEventTableData[timeIndex][dayIndex].selected = "canMeet";
+      } 
+        console.log("canMeet", updatedEventTableData[timeIndex][dayIndex].selected)
       setState({ ...state, eventTableData: updatedEventTableData });
     };
+
+    const handleTimeSlotClickWouldRatherNotMeet = ({ timeIndex, dayIndex }) => {
+      const updatedEventTableData = [...state.eventTableData];
+      if (updatedEventTableData[timeIndex][dayIndex].selected == "wouldRatherNotMeet") {
+        updatedEventTableData[timeIndex][dayIndex].selected = "none";
+      } else {
+        updatedEventTableData[timeIndex][dayIndex].selected = "wouldRatherNotMeet";
+      } 
+      console.log("wouldRatherNotMeet", updatedEventTableData[timeIndex][dayIndex].selected)
+      setState({ ...state, eventTableData: updatedEventTableData });
+    };
+
+
+    // Populate tables with dummy data
+    // How to use:
+    // 1. Click "Import Data" button
+    // 2. Table is now filled with dummy data
+    // Clicking "export data" fills the console with a copyable data string
+    // Replace "tableData" with that string, then "Import Data" will import that data instead.
+    
+    let tableData = [["8:00 AM",{"date":"Sun Oct 29 2023","time":"8:00 AM","selected":"none","count":0.5},{"date":"Mon Oct 30 2023","time":"8:00 AM","selected":"none","count":0.5},{"date":"Tue Oct 31 2023","time":"8:00 AM","selected":"none","count":0.5},{"date":"Wed Nov 01 2023","time":"8:00 AM","selected":"none","count":0.5},{"date":"Thu Nov 02 2023","time":"8:00 AM","selected":"none","count":0.5},{"date":"Fri Nov 03 2023","time":"8:00 AM","selected":"none","count":0.5}],["9:00 AM",{"date":"Sun Oct 29 2023","time":"9:00 AM","selected":"none","count":0.5},{"date":"Mon Oct 30 2023","time":"9:00 AM","selected":"none","count":0.5},{"date":"Tue Oct 31 2023","time":"9:00 AM","selected":"none","count":0.5},{"date":"Wed Nov 01 2023","time":"9:00 AM","selected":"none","count":0.5},{"date":"Thu Nov 02 2023","time":"9:00 AM","selected":"none","count":0.5},{"date":"Fri Nov 03 2023","time":"9:00 AM","selected":"none","count":0.5}],["10:00 AM",{"date":"Sun Oct 29 2023","time":"10:00 AM","selected":"none","count":0},{"date":"Mon Oct 30 2023","time":"10:00 AM","selected":"none","count":0},{"date":"Tue Oct 31 2023","time":"10:00 AM","selected":"none","count":0},{"date":"Wed Nov 01 2023","time":"10:00 AM","selected":"none","count":0},{"date":"Thu Nov 02 2023","time":"10:00 AM","selected":"none","count":0},{"date":"Fri Nov 03 2023","time":"10:00 AM","selected":"none","count":0.5}],["11:00 AM",{"date":"Sun Oct 29 2023","time":"11:00 AM","selected":"canMeet","count":2},{"date":"Mon Oct 30 2023","time":"11:00 AM","selected":"none","count":2},{"date":"Tue Oct 31 2023","time":"11:00 AM","selected":"none","count":2},{"date":"Wed Nov 01 2023","time":"11:00 AM","selected":"canMeet","count":3},{"date":"Thu Nov 02 2023","time":"11:00 AM","selected":"canMeet","count":3},{"date":"Fri Nov 03 2023","time":"11:00 AM","selected":"none","count":1}],["12:00 PM",{"date":"Sun Oct 29 2023","time":"12:00 PM","selected":"canMeet","count":2},{"date":"Mon Oct 30 2023","time":"12:00 PM","selected":"none","count":2},{"date":"Tue Oct 31 2023","time":"12:00 PM","selected":"none","count":2},{"date":"Wed Nov 01 2023","time":"12:00 PM","selected":"canMeet","count":3},{"date":"Thu Nov 02 2023","time":"12:00 PM","selected":"canMeet","count":3},{"date":"Fri Nov 03 2023","time":"12:00 PM","selected":"none","count":1.5}],["1:00 PM",{"date":"Sun Oct 29 2023","time":"1:00 PM","selected":"canMeet","count":2.5},{"date":"Mon Oct 30 2023","time":"1:00 PM","selected":"none","count":1.5},{"date":"Tue Oct 31 2023","time":"1:00 PM","selected":"none","count":2},{"date":"Wed Nov 01 2023","time":"1:00 PM","selected":"none","count":1},{"date":"Thu Nov 02 2023","time":"1:00 PM","selected":"wouldRatherNotMeet","count":2.5},{"date":"Fri Nov 03 2023","time":"1:00 PM","selected":"wouldRatherNotMeet","count":2}],["2:00 PM",{"date":"Sun Oct 29 2023","time":"2:00 PM","selected":"canMeet","count":3},{"date":"Mon Oct 30 2023","time":"2:00 PM","selected":"none","count":1},{"date":"Tue Oct 31 2023","time":"2:00 PM","selected":"none","count":0},{"date":"Wed Nov 01 2023","time":"2:00 PM","selected":"none","count":1},{"date":"Thu Nov 02 2023","time":"2:00 PM","selected":"none","count":1},{"date":"Fri Nov 03 2023","time":"2:00 PM","selected":"wouldRatherNotMeet","count":1}],["3:00 PM",{"date":"Sun Oct 29 2023","time":"3:00 PM","selected":"none","count":2},{"date":"Mon Oct 30 2023","time":"3:00 PM","selected":"none","count":0},{"date":"Tue Oct 31 2023","time":"3:00 PM","selected":"none","count":0},{"date":"Wed Nov 01 2023","time":"3:00 PM","selected":"none","count":1},{"date":"Thu Nov 02 2023","time":"3:00 PM","selected":"none","count":0.5},{"date":"Fri Nov 03 2023","time":"3:00 PM","selected":"none","count":0}],["4:00 PM",{"date":"Sun Oct 29 2023","time":"4:00 PM","selected":"none","count":2},{"date":"Mon Oct 30 2023","time":"4:00 PM","selected":"none","count":0},{"date":"Tue Oct 31 2023","time":"4:00 PM","selected":"none","count":0},{"date":"Wed Nov 01 2023","time":"4:00 PM","selected":"none","count":0},{"date":"Thu Nov 02 2023","time":"4:00 PM","selected":"none","count":0.5},{"date":"Fri Nov 03 2023","time":"4:00 PM","selected":"none","count":0}],["5:00 PM",{"date":"Sun Oct 29 2023","time":"5:00 PM","selected":"none","count":1.5},{"date":"Mon Oct 30 2023","time":"5:00 PM","selected":"none","count":0.5},{"date":"Tue Oct 31 2023","time":"5:00 PM","selected":"none","count":0.5},{"date":"Wed Nov 01 2023","time":"5:00 PM","selected":"none","count":0.5},{"date":"Thu Nov 02 2023","time":"5:00 PM","selected":"none","count":0.5},{"date":"Fri Nov 03 2023","time":"5:00 PM","selected":"wouldRatherNotMeet","count":1.5}],["6:00 PM",{"date":"Sun Oct 29 2023","time":"6:00 PM","selected":"none","count":1.5},{"date":"Mon Oct 30 2023","time":"6:00 PM","selected":"none","count":0.5},{"date":"Tue Oct 31 2023","time":"6:00 PM","selected":"none","count":0.5},{"date":"Wed Nov 01 2023","time":"6:00 PM","selected":"none","count":0.5},{"date":"Thu Nov 02 2023","time":"6:00 PM","selected":"none","count":0.5},{"date":"Fri Nov 03 2023","time":"6:00 PM","selected":"wouldRatherNotMeet","count":1.5}]]
+    
+    // Testing function to export the table to console
+    // note: find the button with id="exportData" 
+    const exportData = () => {
+      const jsonData = JSON.stringify(state.eventTableData);
+      console.log(jsonData); 
+      tableData = jsonData;
+      return (
+        <div>
+          <h2>Exported Data</h2>
+          <p>{jsonData}</p>
+        </div>
+      );
+    };
+
+    const importData = (data) => {
+        setState({ ...state, eventTableData: data });
+    };
+    
 
   return (
     <div>
@@ -162,7 +181,12 @@ const EventForm = () => {
         endTime={endTime}
         eventTableData={eventTableData}
       />
-      <button onClick={handleCreateEvent}>testing purposes only</button>
+      <h2>Join Event</h2>
+      <form id="myForm">
+        <label for="name">Enter unique event code:</label>
+        <input type="text" id="name" name="name" />
+    </form>
+      <button onClick={handleCreateEvent}>Join Event</button>
 
       {/* result... */}
       <div className="tables">
@@ -193,7 +217,7 @@ const EventForm = () => {
                           <td key={`${dayIndex}, ${timeIndex}`}>
                             <input
                               type="checkbox"
-                              checked={slot.selected}
+                              // checked={slot.selected == "canMeet"}
                               onChange={() =>
                                 handleTimeSlotClick({ timeIndex, dayIndex })
                               }
@@ -236,9 +260,10 @@ const EventForm = () => {
                           <td key={`${dayIndex}, ${timeIndex}`}>
                             <input
                               type="checkbox"
-                              checked={slot.selected}
+                              // checked={slot.selected == "wouldRatherNotMeet"}
+                              // checked={console.log(slot.selected)}
                               onChange={() =>
-                                handleTimeSlotClick({ timeIndex, dayIndex })
+                                handleTimeSlotClickWouldRatherNotMeet({ timeIndex, dayIndex })
                               }
                             />
                           </td>
@@ -294,9 +319,13 @@ const EventForm = () => {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </div>            
           )}
         </div>
+        <div className="dummyDataButtons">
+            <button id="exportData" onClick={() => exportData()}>Export Data</button>
+            <button id="importData" onClick={() => importData(tableData)}>Import Data</button>
+          </div>
       </div>
     </div>
   );
