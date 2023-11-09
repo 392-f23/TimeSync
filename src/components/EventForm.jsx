@@ -26,6 +26,11 @@ const EventForm = () => {
   const { eventName, startDate, endDate, startTime, endTime, eventTableData } =
     state;
 
+    const handleEventFormChange = (event) => {
+      const { name, value } = event.target;
+      setState({ ...state, [name]: value });
+    };
+
     const handleSubmitAvailability = () => {
       const { eventTableData } = state;
       const updatedEventTableData = eventTableData.map((slot) =>
@@ -45,21 +50,19 @@ const EventForm = () => {
     
     const handleCreateEvent = (event) => {
       event.preventDefault();
-      // testing purposes only
-      // console.log("here")
-      const eventData = {
-        eventName: "CS392",
-        startDate: "2023-10-29",
-        endDate: "2023-11-03",
-        startTime: "08:53",
-        endTime: "18:53",
-      };
+      // const eventData = {
+      //   eventName: "CS392",
+      //   startDate: "2023-10-29",
+      //   endDate: "2023-11-03",
+      //   startTime: "08:53",
+      //   endTime: "18:53",
+      // };
 
-      // manual input
-      const { eventName, startDate, endDate, startTime, endTime } = eventData;
+      // // testing-purposes skip form
+      // const { eventName, startDate, endDate, startTime, endTime } = eventData;
     
-      // testing-purposes skip form
-      // const { eventName, startDate, endDate, startTime, endTime } = state;
+      // manual input
+      const { eventName, startDate, endDate, startTime, endTime } = state;
     
       // each row should be an hour
       // each col should be a day
@@ -179,14 +182,15 @@ const EventForm = () => {
         endDate={endDate}
         startTime={startTime}
         endTime={endTime}
-        eventTableData={eventTableData}
+        handleInputChange={handleEventFormChange}
+        handleCreateEvent={handleCreateEvent}
       />
       <h2>Join Event</h2>
       <form id="myForm">
         <label for="name">Enter unique event code:</label>
         <input type="text" id="name" name="name" />
     </form>
-      <button onClick={handleCreateEvent}>Join Event</button>
+      <button onClick={() => importData(tableData)}>Join Event</button>
 
       {/* result... */}
       <div className="tables">
