@@ -18,7 +18,8 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (isGoogleApiInitialized && user) { // Check if the Google API is initialized and the user is signed in
+    if (isGoogleApiInitialized && user) {
+      // Check if the Google API is initialized and the user is signed in
       const fetchEvents = async () => {
         try {
           setIsLoading(true);
