@@ -142,17 +142,32 @@ const EventForm = () => {
       setState({ ...state, eventTableData: updatedEventTableData });
     };
 
-    // Testing function to export the table to JSON to console
-    // note: find the button with id="exportJSON" 
-    const exportToJSON = () => {
+
+    // Populate tables with dummy data
+    // How to use:
+    // 1. Click "Import Data" button
+    // 2. Table is now filled with dummy data
+    // Clicking "export data" fills the console with a copyable data string
+    // Replace "tableData" with that string, then "Import Data" will import that data instead.
+    
+    let tableData = [["8:00 AM",{"date":"Sun Oct 29 2023","time":"8:00 AM","selected":"none","count":0.5},{"date":"Mon Oct 30 2023","time":"8:00 AM","selected":"none","count":0.5},{"date":"Tue Oct 31 2023","time":"8:00 AM","selected":"none","count":0.5},{"date":"Wed Nov 01 2023","time":"8:00 AM","selected":"none","count":0.5},{"date":"Thu Nov 02 2023","time":"8:00 AM","selected":"none","count":0.5},{"date":"Fri Nov 03 2023","time":"8:00 AM","selected":"none","count":0.5}],["9:00 AM",{"date":"Sun Oct 29 2023","time":"9:00 AM","selected":"none","count":0.5},{"date":"Mon Oct 30 2023","time":"9:00 AM","selected":"none","count":0.5},{"date":"Tue Oct 31 2023","time":"9:00 AM","selected":"none","count":0.5},{"date":"Wed Nov 01 2023","time":"9:00 AM","selected":"none","count":0.5},{"date":"Thu Nov 02 2023","time":"9:00 AM","selected":"none","count":0.5},{"date":"Fri Nov 03 2023","time":"9:00 AM","selected":"none","count":0.5}],["10:00 AM",{"date":"Sun Oct 29 2023","time":"10:00 AM","selected":"none","count":0},{"date":"Mon Oct 30 2023","time":"10:00 AM","selected":"none","count":0},{"date":"Tue Oct 31 2023","time":"10:00 AM","selected":"none","count":0},{"date":"Wed Nov 01 2023","time":"10:00 AM","selected":"none","count":0},{"date":"Thu Nov 02 2023","time":"10:00 AM","selected":"none","count":0},{"date":"Fri Nov 03 2023","time":"10:00 AM","selected":"none","count":0.5}],["11:00 AM",{"date":"Sun Oct 29 2023","time":"11:00 AM","selected":"canMeet","count":2},{"date":"Mon Oct 30 2023","time":"11:00 AM","selected":"none","count":2},{"date":"Tue Oct 31 2023","time":"11:00 AM","selected":"none","count":2},{"date":"Wed Nov 01 2023","time":"11:00 AM","selected":"canMeet","count":3},{"date":"Thu Nov 02 2023","time":"11:00 AM","selected":"canMeet","count":3},{"date":"Fri Nov 03 2023","time":"11:00 AM","selected":"none","count":1}],["12:00 PM",{"date":"Sun Oct 29 2023","time":"12:00 PM","selected":"canMeet","count":2},{"date":"Mon Oct 30 2023","time":"12:00 PM","selected":"none","count":2},{"date":"Tue Oct 31 2023","time":"12:00 PM","selected":"none","count":2},{"date":"Wed Nov 01 2023","time":"12:00 PM","selected":"canMeet","count":3},{"date":"Thu Nov 02 2023","time":"12:00 PM","selected":"canMeet","count":3},{"date":"Fri Nov 03 2023","time":"12:00 PM","selected":"none","count":1.5}],["1:00 PM",{"date":"Sun Oct 29 2023","time":"1:00 PM","selected":"canMeet","count":2.5},{"date":"Mon Oct 30 2023","time":"1:00 PM","selected":"none","count":1.5},{"date":"Tue Oct 31 2023","time":"1:00 PM","selected":"none","count":2},{"date":"Wed Nov 01 2023","time":"1:00 PM","selected":"none","count":1},{"date":"Thu Nov 02 2023","time":"1:00 PM","selected":"wouldRatherNotMeet","count":2.5},{"date":"Fri Nov 03 2023","time":"1:00 PM","selected":"wouldRatherNotMeet","count":2}],["2:00 PM",{"date":"Sun Oct 29 2023","time":"2:00 PM","selected":"canMeet","count":3},{"date":"Mon Oct 30 2023","time":"2:00 PM","selected":"none","count":1},{"date":"Tue Oct 31 2023","time":"2:00 PM","selected":"none","count":0},{"date":"Wed Nov 01 2023","time":"2:00 PM","selected":"none","count":1},{"date":"Thu Nov 02 2023","time":"2:00 PM","selected":"none","count":1},{"date":"Fri Nov 03 2023","time":"2:00 PM","selected":"wouldRatherNotMeet","count":1}],["3:00 PM",{"date":"Sun Oct 29 2023","time":"3:00 PM","selected":"none","count":2},{"date":"Mon Oct 30 2023","time":"3:00 PM","selected":"none","count":0},{"date":"Tue Oct 31 2023","time":"3:00 PM","selected":"none","count":0},{"date":"Wed Nov 01 2023","time":"3:00 PM","selected":"none","count":1},{"date":"Thu Nov 02 2023","time":"3:00 PM","selected":"none","count":0.5},{"date":"Fri Nov 03 2023","time":"3:00 PM","selected":"none","count":0}],["4:00 PM",{"date":"Sun Oct 29 2023","time":"4:00 PM","selected":"none","count":2},{"date":"Mon Oct 30 2023","time":"4:00 PM","selected":"none","count":0},{"date":"Tue Oct 31 2023","time":"4:00 PM","selected":"none","count":0},{"date":"Wed Nov 01 2023","time":"4:00 PM","selected":"none","count":0},{"date":"Thu Nov 02 2023","time":"4:00 PM","selected":"none","count":0.5},{"date":"Fri Nov 03 2023","time":"4:00 PM","selected":"none","count":0}],["5:00 PM",{"date":"Sun Oct 29 2023","time":"5:00 PM","selected":"none","count":1.5},{"date":"Mon Oct 30 2023","time":"5:00 PM","selected":"none","count":0.5},{"date":"Tue Oct 31 2023","time":"5:00 PM","selected":"none","count":0.5},{"date":"Wed Nov 01 2023","time":"5:00 PM","selected":"none","count":0.5},{"date":"Thu Nov 02 2023","time":"5:00 PM","selected":"none","count":0.5},{"date":"Fri Nov 03 2023","time":"5:00 PM","selected":"wouldRatherNotMeet","count":1.5}],["6:00 PM",{"date":"Sun Oct 29 2023","time":"6:00 PM","selected":"none","count":1.5},{"date":"Mon Oct 30 2023","time":"6:00 PM","selected":"none","count":0.5},{"date":"Tue Oct 31 2023","time":"6:00 PM","selected":"none","count":0.5},{"date":"Wed Nov 01 2023","time":"6:00 PM","selected":"none","count":0.5},{"date":"Thu Nov 02 2023","time":"6:00 PM","selected":"none","count":0.5},{"date":"Fri Nov 03 2023","time":"6:00 PM","selected":"wouldRatherNotMeet","count":1.5}]]
+    
+    // Testing function to export the table to console
+    // note: find the button with id="exportData" 
+    const exportData = () => {
       const jsonData = JSON.stringify(state.eventTableData);
       console.log(jsonData); 
+      tableData = jsonData;
+      return (
+        <div>
+          <h2>Exported Data</h2>
+          <p>{jsonData}</p>
+        </div>
+      );
     };
 
-    const importJSON = (jsonData) => {
-      const importedData = JSON.parse(jsonData);
-      console.log(importedData);
-      setState({ ...state, eventTableData: importedData });
+    const importData = (data) => {
+        setState({ ...state, eventTableData: data });
     };
     
 
@@ -306,13 +321,11 @@ const EventForm = () => {
               </table>
             </div>            
           )}
-          <div className="dummyDataButtons">
-            <button id="exportJSON" onClick={exportToJSON}>Export to JSON</button>
-
-
-          </div>
-          
         </div>
+        <div className="dummyDataButtons">
+            <button id="exportData" onClick={() => exportData()}>Export Data</button>
+            <button id="importData" onClick={() => importData(tableData)}>Import Data</button>
+          </div>
       </div>
     </div>
   );
