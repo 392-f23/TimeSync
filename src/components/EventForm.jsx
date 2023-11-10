@@ -282,18 +282,20 @@ const EventForm = () => {
             </div>
           )}
         </div>
-
-        {/* <div className="submit-availability-button"> */}
-        {eventTableData.length > 0 && (
-          <button
-            onClick={handleSubmitAvailability}
-            className="submit-availability-button"
-          >
-            Submit Availability
-          </button>
-        )}
-        {/* </div> */}
-
+      </div>
+      <div className="tables">
+        <div className="submit-availability-button">
+          {eventTableData.length > 0 && (
+            <button
+              onClick={handleSubmitAvailability}
+              className="submit-availability-button"
+            >
+              Submit Availability
+            </button>
+          )}
+        </div>
+        </div>
+        <div className="tables">
         <div className="group-table">
           {eventTableData.length > 0 && (
             <div>
@@ -326,11 +328,8 @@ const EventForm = () => {
             </div>            
           )}
         </div>
-        <div className="dummyDataButtons">
-            <button id="exportData" onClick={() => exportData()}>Export Data</button>
-            <button id="importData" onClick={() => importData(tableData)}>Import Data</button>
-          </div>
       </div>
+
     </div>
   );
 };

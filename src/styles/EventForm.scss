@@ -107,7 +107,7 @@ button {
 
   > div {
     // Max height and scroll if content overflows
-    max-height: 500px; // You can adjust this value as needed
+    max-height: 1200px; // You can adjust this value as needed
     overflow-y: auto;
 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -125,6 +125,7 @@ button {
       padding: 10px 15px;
       border: 1px solid #e0e0e0;
       text-align: left;
+      color: black;
     }
 
     th {
