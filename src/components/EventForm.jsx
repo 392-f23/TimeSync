@@ -175,7 +175,7 @@ const EventForm = () => {
     
 
   return (
-    <div>
+    <div  className='wrapper'>
       <CreateEventForm
         eventName={eventName}
         startDate={startDate}
@@ -185,18 +185,20 @@ const EventForm = () => {
         handleInputChange={handleEventFormChange}
         handleCreateEvent={handleCreateEvent}
       />
+      <div className="joinevent">
       <h2>Join Event</h2>
       <form id="myForm">
         <label for="name">Enter unique event code:</label>
         <input type="text" id="name" name="name" />
-    </form>
+      </form>
       <button onClick={() => importData(tableData)}>Join Event</button>
+      </div>
 
       {/* result... */}
       <div className="tables">
         <div className="input-table">
           {eventTableData.length > 0 && (
-            <div>
+            <div className="addspace">
               <h2>Your "Can Meet" availability</h2>
               <table>
                 <thead>
@@ -239,7 +241,7 @@ const EventForm = () => {
           )}
 
           {eventTableData.length > 0 && (
-            <div>
+            <div className="addspace">
               <h2>Your "Would Rather Not Meet" availability</h2>
               <table>
                 <thead>
@@ -282,18 +284,20 @@ const EventForm = () => {
             </div>
           )}
         </div>
-
-        {/* <div className="submit-availability-button"> */}
-        {eventTableData.length > 0 && (
-          <button
-            onClick={handleSubmitAvailability}
-            className="submit-availability-button"
-          >
-            Submit Availability
-          </button>
-        )}
-        {/* </div> */}
-
+      </div>
+      <div className="tables">
+        <div className="submit-availability-button">
+          {eventTableData.length > 0 && (
+            <button
+              onClick={handleSubmitAvailability}
+              className="submit-availability-button"
+            >
+              Submit Availability
+            </button>
+          )}
+        </div>
+        </div>
+        <div className="tables">
         <div className="group-table">
           {eventTableData.length > 0 && (
             <div>
@@ -326,11 +330,8 @@ const EventForm = () => {
             </div>            
           )}
         </div>
-        <div className="dummyDataButtons">
-            <button id="exportData" onClick={() => exportData()}>Export Data</button>
-            <button id="importData" onClick={() => importData(tableData)}>Import Data</button>
-          </div>
       </div>
+
     </div>
   );
 };

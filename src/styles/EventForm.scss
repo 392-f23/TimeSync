@@ -4,17 +4,19 @@ body {
   font-family: "Arial", sans-serif;
   background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
     url("https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA5L3BkbWlzY3Byb2plY3QyMC1sYWNtYTIyODQ1Mi1pbWFnZS5qcGc.jpg") !important;
-  background-attachment: fixed;
+  // background-attachment: fixed;
   color: #ffffff;
   text-shadow: 0 0 10px #000000;
+
+  // background: linear-gradient(to bottom, #87CEEB, #ADD8E6);
+
+}
+.wrapper {
+  padding: 20px;
 }
 
-div {
-  margin-bottom: 20px;
-  padding: 20px;
-  border-radius: 5px;
-
-  // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.joinevent {
+  padding: 40px 0px;
 }
 
 h2 {
@@ -99,15 +101,19 @@ button {
   align-items: center;
 }
 
+.addspace {
+  padding: 40px 0px;
+}
+
 .tables {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px; // Reduced gap between the two divs
-  justify-content: space-evenly;
+  // display: flex;
+  // flex-wrap: wrap;
+  // gap: 10px; // Reduced gap between the two divs
+  // justify-content: space-evenly;
 
   > div {
     // Max height and scroll if content overflows
-    max-height: 500px; // You can adjust this value as needed
+    max-height: 1200px; // You can adjust this value as needed
     overflow-y: auto;
 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -125,6 +131,8 @@ button {
       padding: 10px 15px;
       border: 1px solid #e0e0e0;
       text-align: left;
+      color: black;
+      text-shadow: none;
     }
 
     th {
