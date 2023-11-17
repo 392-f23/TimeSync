@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navigation from "./components/Navigation";
 import EventForm from "./components/EventForm";
+import Timetable from "./components/EventForm-chatgpt";
 import { listUpcomingEvents, initGoogleApi, useAuthState } from ".";
 
 const App = () => {
@@ -51,6 +52,14 @@ const App = () => {
         ))}
       </ul>
       <Navigation />
+      {/* <Timetable
+          eventName="My Event Timetable"
+          startDate="2023-10-18"
+          endDate="2023-10-23"
+          startTime="10:00 AM"
+          endTime="5:00 PM"
+          eventTableData={[]}
+        /> */}
       <EventForm />
     </div>
   );
